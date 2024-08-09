@@ -1,12 +1,34 @@
 const sha256 = require("js-sha256");
 
-const fetchLatestBlock = () =>
-  fetch(`https://blockchain.info/q/latesthash?cors=true`).then((r) => r.text());
+class Request {
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl;
+  }
 
-const fetchMerkleRootAndTransactions = (block) =>
-  fetch(`https://blockchain.info/rawblock/${block}?cors=true`)
-    .then((r) => r.json())
-    .then((d) => [d.mrkl_root, d.tx.map((t) => t.hash)]);
+  async fetchData(endpoint) {
+    try {
+      const response = await fetch(`${this.baseUrl}${endpoint}`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+      return response;
+    } catch (error) {
+      console.error("Fetch Error:", error);
+      throw error;
+    }
+  }
+}
+
+const fetchLatestBlock = async (requestObj) => {
+  const response = await requestObj.fetchData("/q/latesthash?cors=true");
+  return response.text();
+};
+
+const fetchMerkleRootAndTransactions = async (requestObj, block) => {
+  const response = await requestObj.fetchData(`/rawblock/${block}?cors=true`);
+  const bodyJson = await response.json();
+  return [bodyJson.mrkl_root, bodyJson.tx.map((t) => t.hash)];
+};
 
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
@@ -55,12 +77,16 @@ const merkleProofRoot = (proof, tx) =>
     tx,
   );
 
-fetchLatestBlock()
-  .then(fetchMerkleRootAndTransactions)
-  .then(([root, txs]) => {
-    const tx = random(txs);
-    const proof = merkleProof(txs, tx);
-
-    const isValid = merkleProofRoot(proof, tx) === root;
-    console.log(isValid);
-  });
+(async () => {
+  const apiRequest = new Request("https://blockchain.info");
+  const latestBlock = await fetchLatestBlock(apiRequest);
+  console.log(latestBlock);
+  const [root, txns] = await fetchMerkleRootAndTransactions(
+    apiRequest,
+    latestBlock,
+  );
+  const tx = random(txns);
+  const proof = merkleProof(txns, tx);
+  const isValid = merkleProofRoot(proof, tx) === root;
+  console.log(isValid);
+})();
