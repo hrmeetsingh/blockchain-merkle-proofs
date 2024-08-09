@@ -3,6 +3,8 @@
 Example code taken from [This repo](https://gist.github.com/eddmann/6b8d0ddd3123c37f296b7680b8fa198a)
 
 To run the verification
+
+`npm i`
 `npm run verify`
 
 What this is doing?
@@ -11,3 +13,6 @@ What this is doing?
 - Selecting a random transaction hash from the list (leaf)
 - Calculating the merkle proof using the transaction and the whole list of transactions
 - Verifying the merkle proof stands for the proof generated in previous step
+
+Merkel proof calculation (log~2(1438) example)
+!["Merkle proof calculation"](assets/MerkelRootProofCalculation.png "Merkel Proof Calculations")
