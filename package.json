@@ -1,0 +1,28 @@
+{
+  "name": "blockchain-merkle-proofs",
+  "version": "1.0.0",
+  "description": "Javascript implementation of Merkle root proof verification on blockchain",
+  "main": "index.js",
+  "scripts": {
+    "verify": "node Verification/blockchain-verification.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hrmeetsingh/blockchain-merkle-proofs.git"
+  },
+  "keywords": [
+    "blockchain",
+    "merkle",
+    "roots",
+    "javascript"
+  ],
+  "author": "Harmeet Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hrmeetsingh/blockchain-merkle-proofs/issues"
+  },
+  "homepage": "https://github.com/hrmeetsingh/blockchain-merkle-proofs#readme",
+  "devDependencies": {
+    "js-sha256": "^0.11.0"
+  }
+}
