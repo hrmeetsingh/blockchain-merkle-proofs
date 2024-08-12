@@ -50,6 +50,9 @@ const hashPair = (a, b = a) => {
 };
 
 const merkleProof = (txs, tx, proof = []) => {
+  console.log(
+    `Merkle Proof calculation with ${txs.length} transactions, selected transaction is ${tx}`,
+  );
   if (txs.length === 1) {
     return proof;
   }
@@ -80,12 +83,13 @@ const merkleProofRoot = (proof, tx) =>
 (async () => {
   const apiRequest = new Request("https://blockchain.info");
   const latestBlock = await fetchLatestBlock(apiRequest);
-  console.log(latestBlock);
+  console.log(`Latest block - ${latestBlock}`);
   const [root, txns] = await fetchMerkleRootAndTransactions(
     apiRequest,
     latestBlock,
   );
   const tx = random(txns);
+  console.log(`Random transaction - ${tx}`);
   const proof = merkleProof(txns, tx);
   const isValid = merkleProofRoot(proof, tx) === root;
   console.log(isValid);
