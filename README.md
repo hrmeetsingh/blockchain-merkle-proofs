@@ -16,6 +16,6 @@ What this is doing?
 - Calculating the merkle proof using the transaction and the whole list of transactions
 - Verifying the merkle proof stands for the proof generated in previous step
 
-Merkel proof calculation complexity ( log<sub>2</sub>1438 steps)
+Merkel proof calculation complexity ( log<sub>2</sub>1494 steps)
 -------
 !["Merkle proof calculation"](assets/MerkelRootProofCalculation.png "Merkel Proof Calculations")
