@@ -58,16 +58,9 @@ const toPairs = (arr: any) =>
     arr.slice(i * 2, i * 2 + 2),
   );
 
-const BufferReverse = (b: Buffer): Buffer => {
-  let tmp;
-  let len = b.length;
-  let nb = Buffer.from(b);
-  for (let i = 0; i < len / 2; i++) {
-    tmp = nb[i];
-    nb[i] = nb[len - i - 1];
-    nb[len - i - 1] = tmp;
-  }
-  return nb;
+const BufferReverse = (buffer: Buffer): Buffer => {
+  let newBuffer = Buffer.from(buffer);
+  return newBuffer.reverse();
 };
 
 const hashPair = (bufpair: Buffer[]) => {
@@ -123,7 +116,7 @@ let main = async () => {
   console.log("latest block hash=", blkh);
   let blk = await fetchRawBlock(blkh);
   console.log("merkle root=", blk.mrkl_root);
-  console.log(`${blk.tx.length} transactions`);
+  // console.log(`${blk.tx.length} transactions`);
   validateMerkleRoot(blk);
 };
 
