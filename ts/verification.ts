@@ -86,7 +86,7 @@ let validateMerkleRoot = (blk: RawBlock) => {
     let txs = blk.tx.map((t) => Buffer.from(t.hash, "hex"));
     rootHash = calcMerkleRoot(txs).toString("hex");
   }
-  console.log(rootHash == blk.mrkl_root);
+  console.log(rootHash === blk.mrkl_root);
 };
 
 const fetchLatestHash = () =>
