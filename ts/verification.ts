@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import crypto from "crypto";
+import { retry } from "./retry";
 
 let sha256 = (x: Buffer): Buffer =>
   crypto.createHash("sha256").update(x).digest();
