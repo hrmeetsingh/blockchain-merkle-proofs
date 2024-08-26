@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import crypto from "crypto";
+import { retry } from "./retry";
 
 let sha256 = (x: Buffer): Buffer =>
   crypto.createHash("sha256").update(x).digest();
@@ -89,10 +90,19 @@ let validateMerkleRoot = (blk: RawBlock) => {
   console.log(rootHash === blk.mrkl_root);
 };
 
-const fetchLatestHash = () =>
-  fetch(`https://blockchain.info/q/latesthash?cors=true`).then((r) =>
-    r.text(),
-  ) as Promise<string>;
+const isSuccessful = (result: string): boolean => typeof result === "string";
+
+const fetchData = async (url: string): Promise<string> => {
+  const result = await fetch(url).then(async (r) => await r.text());
+  return result;
+};
+
+const fetchLatestHash = async () => {
+  return await retry(
+    () => fetchData("https://blockchain.info/q/latesthash?cors=true"),
+    isSuccessful,
+  );
+};
 
 const fetchRawBlock = (blockHash: string) =>
   fetch(`https://blockchain.info/rawblock/${blockHash}?cors=true`).then((r) =>
@@ -116,7 +126,6 @@ let main = async () => {
   console.log("latest block hash=", blkh);
   let blk = await fetchRawBlock(blkh);
   console.log("merkle root=", blk.mrkl_root);
-  // console.log(`${blk.tx.length} transactions`);
   validateMerkleRoot(blk);
 };
 
