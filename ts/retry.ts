@@ -18,12 +18,13 @@ export function retry<T>(
           );
         } else {
           return Promise.reject(
-            new Error("Predicate not met within max retries"),
+            new Error("Not successful in give number of retries"),
           );
         }
       })
       .catch(async (error) => {
         if (attempt < maxRetries) {
+          console.log(`Retry count - ${attempt}`);
           return new Promise((res) => setTimeout(res, delay)).then(() =>
             executeOperation(attempt + 1),
           );
